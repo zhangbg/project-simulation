@@ -26,7 +26,6 @@ require.config({
     priority: [
         "jquery"
     ]
-
 });
 //window.name = "NG_DEFER_BOOTSTRAP!";
 require([
@@ -41,7 +40,10 @@ require([
 	var widgets = { //Facked Data: related with dashboard and nth-column layout
 		column : 3,
 		records : [
-			{id : 'widget_2014_01', 'x' : 0, 'y' : 0, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'line', chartDatas : []}
+			{id : 'widget_2014_01', 'x' : 0, 'y' : 0, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'line', chartDatas : []},
+			{id : 'widget_2014_01_2', 'x' : 0, 'y' : 0, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'line', chartDatas : []},
+			{id : 'widget_2014_01_3', 'x' : 0, 'y' : 0, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'line', chartDatas : []},
+			{id : 'widget_2014_01_4', 'x' : 0, 'y' : 0, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'line', chartDatas : []}
 			// {id : 'widget_2014_02', 'x' : 1, 'y' : 0, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'bar', chartDatas : []},
 			// {id : 'widget_2014_03', 'x' : 2, 'y' : 0, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'column', chartDatas : []},
 			// {id : 'widget_2014_04', 'x' : 0, 'y' : 2, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'spline', chartDatas : []},
@@ -51,6 +53,9 @@ require([
 		],
 		config : {
 			'widget_2014_01' : {'xAxes' : ['browser'], 'yAxes' : ['pv'], 'series' : ['device']}, // n-th column name
+			'widget_2014_01_2' : {'xAxes' : [], 'yAxes' : ['pv'], 'series' : ['device']}, // n-th column name
+			'widget_2014_01_3' : {'xAxes' : ['browser'], 'yAxes' : ['pv'], 'series' : []}, // n-th column name
+			'widget_2014_01_4' : {'xAxes' : [], 'yAxes' : ['pv'], 'series' : []}, // n-th column name
 			'widget_2014_02' : {'xAxes' : ['browser'], 'yAxes' : ['pv'], 'series' : ['device']},
 			'widget_2014_03' : {'xAxes' : ['browser'], 'yAxes' : ['pv'], 'series' : ['device']},
 			'widget_2014_04' : {'xAxes' : ['browser'], 'yAxes' : ['pv'], 'series' : ['device']},

@@ -43,7 +43,7 @@ define(['gsdata', 'highcharts', 'underscore'], function (gsdata) {
 		
 			length = list.length || 0, i = 0, temp = {},  
 			existSeries = {}, existCategories = {},
-			seriesResult = [], catagoriesResult = [], catagoriesObj = {};
+			seriesResult = [], catagoriesResult = [], catagoriesObj = {};//record all catagories.
 			seriesWithCatas = {}, defaultValue = 0;
 		
 		if (yAxes.length === 2) {
@@ -54,8 +54,8 @@ define(['gsdata', 'highcharts', 'underscore'], function (gsdata) {
 		
 		for (; i < length; i++) {
 			//Todo : check each column type
+			temp = list[i];
 			if (seriesCol) {
-				temp = list[i];
 				seriesColVal = temp[seriesCol];
 				existSeries[seriesColVal] || seriesResult.push(seriesColVal);
 				existSeries[seriesColVal] = true;
@@ -64,11 +64,11 @@ define(['gsdata', 'highcharts', 'underscore'], function (gsdata) {
 					xAxisColVal = temp[xAxisCol];
 					existCategories[xAxisColVal] || (catagoriesResult.push(xAxisColVal) && (catagoriesObj[xAxisColVal] = defaultValue));
 					existCategories[xAxisColVal] = true;
-					if (seriesWithCatas[seriesColVal]) {
+					/* if (seriesWithCatas[seriesColVal]) {
 						seriesWithCatas[seriesColVal].push(xAxisColVal);
 					} else {
 						seriesWithCatas[seriesColVal] = [xAxisColVal];
-					}
+					} */
 				}
 			} else {
 				if (xAxisCol) {
@@ -146,7 +146,7 @@ define(['gsdata', 'highcharts', 'underscore'], function (gsdata) {
 		};
 	}
 	
-	function _addSeries(option, chartOpts) {
+	function _addSeries(option, chartOpts) { //Note: four situation about series and xAxis's combination
 		var preOptions = option.preparedOptions,
 			chartType = chartOpts.chartType || 'line',
 			chartDatas = chartOpts.chartDatas || {}, rows = chartDatas.rows || [],
@@ -154,29 +154,40 @@ define(['gsdata', 'highcharts', 'underscore'], function (gsdata) {
 			xAxes = chartConfig.xAxes || [], xAxisCol = xAxes[0],
 			series = chartConfig.series || [], seriesCol = series[0] || '', 
 			yAxes = chartConfig.yAxes || [],
-			tseries = [], seriesArray = [], categories = [], categoriesJson = '';
+			tseries = [], seriesArray = preOptions.seriesResult, categories = preOptions.catagoriesResult;
+		
+		var aggregate = function (type, leftOper, rightOper) { //This is the default aggregate function for the yAsix value which has the same xAsix value.
+			var result = rightOper;
+			if (leftOper.length === undefined) {
+				result = leftOper + rightOper;
+			} else if (leftOper.length === 2) {
+				result = [leftOper[0] + rightOper[0], leftOper[1] + rightOper[1]];
+			} else if (leftOper.length === 3) {
+				result = [leftOper[0] + rightOper[0], leftOper[1] + rightOper[1], leftOper[2] + rightOper[2]];
+			}
+			return result;
+		};
 		
 		if (preOptions.withSeries) {
-			seriesArray = preOptions.seriesResult;
-			categories = preOptions.catagoriesResult;
-			if (preOptions.withxAxis) {
+			if (preOptions.withxAxis) { //WithSeries && With xAxis, 'result' include all the yAxis values that match the series value and xAxis value; (using aggregate defaultly)
 				tseries = _.map(seriesArray, function (value, index, listObj) {
-					var i = 0, length = rows.length, temp = {}, result = [], yAxisValue = null;
-					categoriesJson = $.extend({}, preOptions.catagoriesObj);
+					var i = 0, length = rows.length, temp = {}, result = [], yAxisValue = null, existCatagories = {},
+						categoriesJson = $.extend({}, preOptions.catagoriesObj);
 					for (; i < length; i++) {
 						temp = rows[i];
 						if (temp[seriesCol] === value && (temp[xAxisCol] in categoriesJson)) {
 							if (yAxes.length === 1) {
-								yAxisValue = temp[yAxes[0]];
+								yAxisValue = Number(temp[yAxes[0]]) || 0;
 							} else if (yAxes.length === 2) {
-								yAxisValue = [temp[yAxes[0]], temp[yAxes[1]]];
+								yAxisValue = [Number(temp[yAxes[0]]) || 0, Number(temp[yAxes[1]]) || 0];
 							} else {// if (yAxes.length === 3) 
-								yAxisValue = [temp[yAxes[0]], temp[yAxes[1]], temp[yAxes[2]]];
+								yAxisValue = [Number(temp[yAxes[0]]) || 0, Number(temp[yAxes[1]]) || 0, Number(temp[yAxes[2]]) || 0];
 							}
-							categoriesJson[temp[xAxisCol]] = yAxisValue; // 这里可以做同一个x值对应的y值的聚合
+							categoriesJson[temp[xAxisCol]] = existCatagories[temp[xAxisCol]] ? aggregate('sum', categoriesJson[temp[xAxisCol]], yAxisValue) : yAxisValue; // 这里可以做同一个x值对应的y值的聚合
+							existCatagories[temp[xAxisCol]] = true;
 						}
 					}
-					for (var key in categoriesJson) {
+					for (var key in categoriesJson) {//Note: be careful for the order of the json loop iteration.
 						result.push(categoriesJson[key]);
 					}
 					
@@ -185,11 +196,78 @@ define(['gsdata', 'highcharts', 'underscore'], function (gsdata) {
 						data : result
 					};
 				});
-			} else {
-				
+			} else {  //WithSeries && Without xAxis, 'result' include all the yAxis values that match the series value;
+				tseries = _.map(seriesArray, function (value, index, listObj) {
+					var i = 0, length = rows.length, temp = {}, result = [], yAxisValue = null;
+					for (; i < length; i++) {
+						temp = rows[i];
+						if (temp[seriesCol] === value) {
+							if (yAxes.length === 1) {
+								yAxisValue = Number(temp[yAxes[0]]) || 0;
+							} else if (yAxes.length === 2) {
+								yAxisValue = [Number(temp[yAxes[0]]) || 0, Number(temp[yAxes[1]]) || 0];
+							} else {// if (yAxes.length === 3) 
+								yAxisValue = [Number(temp[yAxes[0]]) || 0, Number(temp[yAxes[1]]) || 0, Number(temp[yAxes[2]]) || 0];
+							}
+							result.push(yAxisValue);
+						}
+					}
+					
+					return {
+						name : value,
+						data : result
+					};
+				});
 			}
 		} else {
-		
+			if (preOptions.withxAxis) { //WithoutSeries && With xAxis, 'result' include all the yAxis values that match xAxis value; (using aggregate defaultly)
+				var i = 0, length = rows.length, temp = {}, result = [], yAxisValue = null, existCatagories = {},
+					categoriesJson = $.extend({}, preOptions.catagoriesObj);
+				for (; i < length; i++) {
+					temp = rows[i];
+					if (temp[xAxisCol] in categoriesJson) {
+						if (yAxes.length === 1) {
+							yAxisValue = Number(temp[yAxes[0]]) || 0;
+						} else if (yAxes.length === 2) {
+							yAxisValue = [Number(temp[yAxes[0]]) || 0, Number(temp[yAxes[1]]) || 0];
+						} else {// if (yAxes.length === 3) 
+							yAxisValue = [Number(temp[yAxes[0]]) || 0, Number(temp[yAxes[1]]) || 0, Number(temp[yAxes[2]]) || 0];
+						}
+						categoriesJson[temp[xAxisCol]] = existCatagories[temp[xAxisCol]] ? aggregate('sum', categoriesJson[temp[xAxisCol]], yAxisValue) : yAxisValue; // 这里可以做同一个x值对应的y值的聚合
+						existCatagories[temp[xAxisCol]] = true;
+					}
+				}
+				for (var key in categoriesJson) { //Note: be careful for the order of the json loop iteration.
+					result.push(categoriesJson[key]);
+				}
+				
+				tseries = [
+					{
+						name : 'none series',
+						data : result
+					}
+				];
+			} else {//WithoutSeries && Without xAxis, 'result' include all the yAxis values
+				var i = 0, length = rows.length, temp = {}, result = [], yAxisValue = null;
+				for (; i < length; i++) {
+					temp = rows[i];
+					if (yAxes.length === 1) {
+						yAxisValue = Number(temp[yAxes[0]]) || 0;
+					} else if (yAxes.length === 2) {
+						yAxisValue = [Number(temp[yAxes[0]]) || 0, Number(temp[yAxes[1]]) || 0];
+					} else {// if (yAxes.length === 3) 
+						yAxisValue = [Number(temp[yAxes[0]]) || 0, Number(temp[yAxes[1]]) || 0, Number(temp[yAxes[2]]) || 0];
+					}
+					result.push(yAxisValue);
+				}
+				
+				tseries = [
+					{
+						name : 'none series',
+						data : result
+					}
+				];
+			}
 		}
 		
 		option.series = tseries;
@@ -217,7 +295,7 @@ define(['gsdata', 'highcharts', 'underscore'], function (gsdata) {
 		chartOpts.chartDatas = $.extend(true, {}, gsdata.pureData); //test data
 		option = _generateOption(chartOpts);
 		option.title =  {
-			text: chartType + ' Chart'
+			text: chartType + ' Chart: ' + container
 		};
 		console.dir(option);
 		

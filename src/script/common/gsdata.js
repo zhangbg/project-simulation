@@ -9,7 +9,7 @@ define(function () {
 				{'device' : 'computer', 'browser' : 'safari', 'pv' : 1600, 'uv' : 2600, 'visits' : 3600, 'bounceRate' : 0.656},
 				{'device' : 'computer', 'browser' : 'opera', 'pv' : 1500, 'uv' : 2500, 'visits' : 3500, 'bounceRate' : 0.556},
 				{'device' : 'computer', 'browser' : 'others1', 'pv' : 1400, 'uv' : 2400, 'visits' : 3400, 'bounceRate' : 0.456},
-				// {'device' : 'computer', 'browser' : 'others1', 'pv' : 1400, 'uv' : 2400, 'visits' : 3400, 'bounceRate' : 0.456}, 
+				{'device' : 'computer', 'browser' : 'others1', 'pv' : 1900, 'uv' : 2400, 'visits' : 3400, 'bounceRate' : 0.456}, 
 			 //special the exist record
 				{'device' : 'phone', 'browser' : 'firefox', 'pv' : 4900, 'uv' : 5900, 'visits' : 6900, 'bounceRate' : 0.978},
 				{'device' : 'phone', 'browser' : 'ie', 'pv' : 4800, 'uv' : 5800, 'visits' : 6800, 'bounceRate' : 0.878},
