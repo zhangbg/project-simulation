@@ -1,0 +1,11 @@
+.mainzone {
+	height: 500px;
+	background: aliceblue;
+}
+
+.widget {
+	width: 90%;
+	height: 90%;
+	margin: 10px auto;
+	background-color: beige;
+}
