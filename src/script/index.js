@@ -43,13 +43,16 @@ require([
 			{id : 'widget_2014_01', 'x' : 0, 'y' : 0, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'line', chartDatas : []},
 			{id : 'widget_2014_01_2', 'x' : 0, 'y' : 0, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'line', chartDatas : []},
 			{id : 'widget_2014_01_3', 'x' : 0, 'y' : 0, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'line', chartDatas : []},
-			{id : 'widget_2014_01_4', 'x' : 0, 'y' : 0, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'line', chartDatas : []}
-			// {id : 'widget_2014_02', 'x' : 1, 'y' : 0, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'bar', chartDatas : []},
-			// {id : 'widget_2014_03', 'x' : 2, 'y' : 0, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'column', chartDatas : []},
-			// {id : 'widget_2014_04', 'x' : 0, 'y' : 2, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'spline', chartDatas : []},
-			// {id : 'widget_2014_05', 'x' : 1, 'y' : 2, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'area', chartDatas : []},
-			// {id : 'widget_2014_06', 'x' : 2, 'y' : 2, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'areaspline', chartDatas : []},
-			// {id : 'widget_2014_07', 'x' : 0, 'y' : 4, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'pie', chartDatas : []}
+			{id : 'widget_2014_01_4', 'x' : 0, 'y' : 0, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'line', chartDatas : []},
+			{id : 'widget_2014_02', 'x' : 0, 'y' : 2, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'spline', chartDatas : []},
+			{id : 'widget_2014_03', 'x' : 1, 'y' : 0, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'bar', chartDatas : []},
+			{id : 'widget_2014_04', 'x' : 2, 'y' : 0, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'column', chartDatas : []},
+			{id : 'widget_2014_05', 'x' : 1, 'y' : 2, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'area', chartDatas : []},
+			{id : 'widget_2014_06', 'x' : 2, 'y' : 2, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'areaspline', chartDatas : []},
+			{id : 'widget_2014_07', 'x' : 0, 'y' : 4, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'pie', chartDatas : []},
+			{id : 'widget_2014_07_2', 'x' : 0, 'y' : 4, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'pie', chartDatas : []},
+			{id : 'widget_2014_07_3', 'x' : 0, 'y' : 4, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'pie', chartDatas : []},
+			{id : 'widget_2014_07_4', 'x' : 0, 'y' : 4, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'pie', chartDatas : []}
 		],
 		config : {
 			'widget_2014_01' : {'xAxes' : ['browser'], 'yAxes' : ['pv'], 'series' : ['device']}, // n-th column name
@@ -61,7 +64,10 @@ require([
 			'widget_2014_04' : {'xAxes' : ['browser'], 'yAxes' : ['pv'], 'series' : ['device']},
 			'widget_2014_05' : {'xAxes' : ['browser'], 'yAxes' : ['pv'], 'series' : ['device']},
 			'widget_2014_06' : {'xAxes' : ['browser'], 'yAxes' : ['pv'], 'series' : ['device']},
-			'widget_2014_07' : {'xAxes' : ['browser'], 'yAxes' : ['pv'], 'series' : ['device']}
+			'widget_2014_07' : {'xAxes' : ['browser'], 'yAxes' : ['pv'], 'series' : ['device']},
+			'widget_2014_07_2' : {'xAxes' : [], 'yAxes' : ['pv'], 'series' : ['device']},
+			'widget_2014_07_3' : {'xAxes' : ['browser'], 'yAxes' : ['pv'], 'series' : []},
+			'widget_2014_07_4' : {'xAxes' : [], 'yAxes' : ['pv'], 'series' : []}
 		}
 	};
 	var i = 0, records = widgets.records || [], length = records.length, temp = null, tpl = '';

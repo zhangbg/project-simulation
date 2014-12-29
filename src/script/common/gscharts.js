@@ -120,10 +120,11 @@ define(['gsdata', 'highcharts', 'underscore'], function (gsdata) {
                         color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
                     }
                 },
-				showInLegend: true,
-                startAngle: -90,
+				slicedOffset : 20
+				/*,showInLegend: true
+                ,startAngle: -90,
                 endAngle: 90,
-                center: ['50%', '75%']
+                center: ['50%', '75%'] */
             }
         }
 	}
@@ -188,7 +189,11 @@ define(['gsdata', 'highcharts', 'underscore'], function (gsdata) {
 						}
 					}
 					for (var key in categoriesJson) {//Note: be careful for the order of the json loop iteration.
-						result.push(categoriesJson[key]);
+						if (chartType === 'pie') { //Note: use all series's catagories union set, not the each series owner catagories.
+							result.push([key, categoriesJson[key]]);
+						} else {
+							result.push(categoriesJson[key]);
+						}
 					}
 					
 					return {
@@ -209,7 +214,11 @@ define(['gsdata', 'highcharts', 'underscore'], function (gsdata) {
 							} else {// if (yAxes.length === 3) 
 								yAxisValue = [Number(temp[yAxes[0]]) || 0, Number(temp[yAxes[1]]) || 0, Number(temp[yAxes[2]]) || 0];
 							}
-							result.push(yAxisValue);
+							if (chartType === 'pie') {
+								result.push(['value' + i, yAxisValue]); //or result.push(yAxisValue);
+							} else {
+								result.push(yAxisValue);
+							}
 						}
 					}
 					
@@ -238,7 +247,11 @@ define(['gsdata', 'highcharts', 'underscore'], function (gsdata) {
 					}
 				}
 				for (var key in categoriesJson) { //Note: be careful for the order of the json loop iteration.
-					result.push(categoriesJson[key]);
+					if (chartType === 'pie') {
+						result.push([key, categoriesJson[key]]);
+					} else {
+						result.push(categoriesJson[key]);
+					}
 				}
 				
 				tseries = [
@@ -258,7 +271,11 @@ define(['gsdata', 'highcharts', 'underscore'], function (gsdata) {
 					} else {// if (yAxes.length === 3) 
 						yAxisValue = [Number(temp[yAxes[0]]) || 0, Number(temp[yAxes[1]]) || 0, Number(temp[yAxes[2]]) || 0];
 					}
-					result.push(yAxisValue);
+					if (chartType === 'pie') {
+						result.push(['value' + i, yAxisValue]); //or result.push(yAxisValue);
+					} else {
+						result.push(yAxisValue);
+					}
 				}
 				
 				tseries = [
@@ -281,8 +298,10 @@ define(['gsdata', 'highcharts', 'underscore'], function (gsdata) {
 		option.chart = {type : chartType};
 		_prepareOption(option, chartOpts);
 		_addPlotOptions(option, chartOpts);
-		_addxAxis(option, chartOpts);
-		_addyAxis(option, chartOpts);
+		if (chartType !== 'pie') {
+			_addxAxis(option, chartOpts);
+			_addyAxis(option, chartOpts);
+		}
 		_addSeries(option, chartOpts);
 		return option;
 	}
