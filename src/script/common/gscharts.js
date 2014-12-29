@@ -32,6 +32,33 @@ define(['gsdata', 'highcharts', 'underscore'], function (gsdata) {
 		return result;
 	}
 	
+	//deal with transforming between different charts
+	function _preprocess(option, chartOpts) {
+		var chartType = chartOpts.chartType || 'line',
+			chartConfig = chartOpts.chartConfig || {}, yAxes = chartConfig.yAxes || [];
+		if (chartType === 'scatter' || chartType === 'bubble') {
+			if (yAxes.length === 1) {
+				if (chartType === 'bubble') {
+					yAxes.push(yAxes[0], yAxes[0]);
+				} else {
+					yAxes.push(yAxes[0]);
+				}
+			} else if (yAxes.length === 2 && chartType === 'bubble') {
+				yAxes.push(yAxes[1]);
+			} else if (yAxes.length === 3 && chartType === 'scatter') {
+				yAxes.pop();
+			}
+		} else if (chartType === 'columnrange' || chartType === 'arearange') {
+			if (yAxes.length === 1) {
+				yAxes.unshift('noneExist');
+			}
+		} else {
+			if (yAxes.length > 1) {
+				chartConfig.yAxes = [yAxes[0]];
+			}
+		}
+	}
+	
 	//get series, get xAxis's of series, get set of xAxis
 	function _prepareOption(option, chartOpts) {
 		var chartType = chartOpts.chartType || 'line',
@@ -94,14 +121,10 @@ define(['gsdata', 'highcharts', 'underscore'], function (gsdata) {
 			'withxAxis' : (xAxes.length > 0),
 			'withSeries' : (series.length > 0)
 		};
-	}
-	
-	function _preprocess(option, chartOpts) {
-		var chartType = chartOpts.chartType || 'line',
-			preOptions = option.preparedOptions;
+		
 		if (chartType === 'scatter' || chartType === 'bubble') { // scatter chart only have series and yAsex, xAsix can't work in this chart.
-			preOptions.xAxisType = 'linear';
-			preOptions.withxAxis = false;
+			option.preparedOptions.xAxisType = 'linear';
+			option.preparedOptions.withxAxis = false;
 		}
 	}
 	
@@ -321,8 +344,10 @@ define(['gsdata', 'highcharts', 'underscore'], function (gsdata) {
 		
 		var option = $.extend(true, {}, defaultOption);
 		option.chart = {type : chartType};
-		_prepareOption(option, chartOpts);
+		chartOpts = $.extend(true, {}, chartOpts);
+		
 		_preprocess(option, chartOpts);
+		_prepareOption(option, chartOpts);
 		_addPlotOptions(option, chartOpts);
 		if (chartType !== 'pie') {
 			_addxAxis(option, chartOpts);
