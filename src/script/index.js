@@ -12,6 +12,7 @@ require.config({
         "bootstrap": "plugins/bootstrap/js/bootstrap.min",
 		"underscore": "plugins/underscore-min",
         "highcharts": "plugins/highcharts-4.0.4/highcharts",
+        "highcharts-more": "plugins/highcharts-4.0.4/highcharts-more",
         "exporting": "plugins/highcharts-4.0.4/modules/exporting",
         //self script
 		"gscharts": "common/gscharts",
@@ -21,6 +22,7 @@ require.config({
         "jquery-migrate": ["jquery"],
         "jquery-ui":["jquery"],
         "bootstrap": ["jquery"],
+        "highcharts-more": ["highcharts"],
         "exporting": ["highcharts"]
     },
     priority: [
@@ -34,7 +36,8 @@ require([
     "jquery-migrate",
     "jquery-ui",
     "bootstrap",
-	"highcharts"
+	"highcharts",
+	"highcharts-more"
 ], function (jquery, gscharts) {
 	console.dir(jquery);
 	var widgets = { //Facked Data: related with dashboard and nth-column layout
@@ -52,7 +55,11 @@ require([
 			{id : 'widget_2014_07', 'x' : 0, 'y' : 4, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'pie', chartDatas : []},
 			{id : 'widget_2014_07_2', 'x' : 0, 'y' : 4, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'pie', chartDatas : []},
 			{id : 'widget_2014_07_3', 'x' : 0, 'y' : 4, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'pie', chartDatas : []},
-			{id : 'widget_2014_07_4', 'x' : 0, 'y' : 4, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'pie', chartDatas : []}
+			{id : 'widget_2014_07_4', 'x' : 0, 'y' : 4, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'pie', chartDatas : []},
+			{id : 'widget_2014_08', 'x' : 0, 'y' : 4, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'columnrange', chartDatas : []},
+			{id : 'widget_2014_09', 'x' : 0, 'y' : 4, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'arearange', chartDatas : []},
+			{id : 'widget_2014_10', 'x' : 0, 'y' : 4, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'scatter', chartDatas : []},
+			{id : 'widget_2014_11', 'x' : 0, 'y' : 4, 'width' : 1, 'height' : 2, widgetType : 'highcharts', chartType : 'bubble', chartDatas : []}
 		],
 		config : {
 			'widget_2014_01' : {'xAxes' : ['browser'], 'yAxes' : ['pv'], 'series' : ['device']}, // n-th column name
@@ -67,7 +74,11 @@ require([
 			'widget_2014_07' : {'xAxes' : ['browser'], 'yAxes' : ['pv'], 'series' : ['device']},
 			'widget_2014_07_2' : {'xAxes' : [], 'yAxes' : ['pv'], 'series' : ['device']},
 			'widget_2014_07_3' : {'xAxes' : ['browser'], 'yAxes' : ['pv'], 'series' : []},
-			'widget_2014_07_4' : {'xAxes' : [], 'yAxes' : ['pv'], 'series' : []}
+			'widget_2014_07_4' : {'xAxes' : [], 'yAxes' : ['pv'], 'series' : []},
+			'widget_2014_08' : {'xAxes' : ['browser'], 'yAxes' : ['pv', 'uv'], 'series' : ['device']},
+			'widget_2014_09' : {'xAxes' : ['browser'], 'yAxes' : ['pv', 'uv'], 'series' : ['device']},
+			'widget_2014_10' : {'xAxes' : ['browser'], 'yAxes' : ['pv', 'uv'], 'series' : ['device']},
+			'widget_2014_11' : {'xAxes' : ['browser'], 'yAxes' : ['pv', 'uv', 'visits'], 'series' : ['device']}
 		}
 	};
 	var i = 0, records = widgets.records || [], length = records.length, temp = null, tpl = '';

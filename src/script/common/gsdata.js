@@ -4,7 +4,7 @@ define(function () {
 			columns : ['device', 'browser', 'pv', 'uv', 'visits', 'bounceRate'],
 			rows : [
 				{'device' : 'computer', 'browser' : 'firefox', 'pv' : 1900, 'uv' : 2900, 'visits' : 3900, 'bounceRate' : 0.956},
-				{'device' : 'computer', 'browser' : 'chrome', 'pv' : 1800, 'uv' : 2800, 'visits' : 3800, 'bounceRate' : 0.856},
+				{'device' : 'computer', 'browser' : 'chrome', 'pv' : 3800, 'uv' : 2800, 'visits' : 3800, 'bounceRate' : 0.856},
 				{'device' : 'computer', 'browser' : 'ie', 'pv' : 1700, 'uv' : 2700, 'visits' : 3700, 'bounceRate' : 0.756},
 				{'device' : 'computer', 'browser' : 'safari', 'pv' : 1600, 'uv' : 2600, 'visits' : 3600, 'bounceRate' : 0.656},
 				{'device' : 'computer', 'browser' : 'opera', 'pv' : 1500, 'uv' : 2500, 'visits' : 3500, 'bounceRate' : 0.556},

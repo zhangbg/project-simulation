@@ -7,7 +7,7 @@ define(['gsdata', 'highcharts', 'underscore'], function (gsdata) {
 			enabled: false
 		},
 		tooltip: {
-			valueSuffix: ' customize'
+			// valueSuffix: ' customize'
 			// pointFormat: '{series.name} produced <b>{point.y:,.0f}</b><br/>warheads in {point.x}'
 		},
 	};
@@ -96,6 +96,15 @@ define(['gsdata', 'highcharts', 'underscore'], function (gsdata) {
 		};
 	}
 	
+	function _preprocess(option, chartOpts) {
+		var chartType = chartOpts.chartType || 'line',
+			preOptions = option.preparedOptions;
+		if (chartType === 'scatter' || chartType === 'bubble') { // scatter chart only have series and yAsex, xAsix can't work in this chart.
+			preOptions.xAxisType = 'linear';
+			preOptions.withxAxis = false;
+		}
+	}
+	
 	function _addPlotOptions(option, chartOpts) {
 		option.plotOptions = {
             area: {
@@ -125,6 +134,14 @@ define(['gsdata', 'highcharts', 'underscore'], function (gsdata) {
                 ,startAngle: -90,
                 endAngle: 90,
                 center: ['50%', '75%'] */
+            },
+			columnrange: {
+                dataLabels: {
+                    enabled: true,
+                    formatter: function () {
+                        return this.y;//+ '°C';
+                    }
+                }
             }
         }
 	}
@@ -191,6 +208,8 @@ define(['gsdata', 'highcharts', 'underscore'], function (gsdata) {
 					for (var key in categoriesJson) {//Note: be careful for the order of the json loop iteration.
 						if (chartType === 'pie') { //Note: use all series's catagories union set, not the each series owner catagories.
 							result.push([key, categoriesJson[key]]);
+						} else if (chartType === 'columnrange') {
+							result.push(categoriesJson[key] && categoriesJson[key].sort());
 						} else {
 							result.push(categoriesJson[key]);
 						}
@@ -216,6 +235,8 @@ define(['gsdata', 'highcharts', 'underscore'], function (gsdata) {
 							}
 							if (chartType === 'pie') {
 								result.push(['value' + i, yAxisValue]); //or result.push(yAxisValue);
+							} else if (chartType === 'columnrange') {
+								result.push(yAxisValue && yAxisValue.sort());
 							} else {
 								result.push(yAxisValue);
 							}
@@ -249,6 +270,8 @@ define(['gsdata', 'highcharts', 'underscore'], function (gsdata) {
 				for (var key in categoriesJson) { //Note: be careful for the order of the json loop iteration.
 					if (chartType === 'pie') {
 						result.push([key, categoriesJson[key]]);
+					} else if (chartType === 'columnrange') {
+						result.push(categoriesJson[key] && categoriesJson[key].sort());
 					} else {
 						result.push(categoriesJson[key]);
 					}
@@ -273,6 +296,8 @@ define(['gsdata', 'highcharts', 'underscore'], function (gsdata) {
 					}
 					if (chartType === 'pie') {
 						result.push(['value' + i, yAxisValue]); //or result.push(yAxisValue);
+					} else if (chartType === 'columnrange') {
+						result.push(yAxisValue && yAxisValue.sort());
 					} else {
 						result.push(yAxisValue);
 					}
@@ -297,6 +322,7 @@ define(['gsdata', 'highcharts', 'underscore'], function (gsdata) {
 		var option = $.extend(true, {}, defaultOption);
 		option.chart = {type : chartType};
 		_prepareOption(option, chartOpts);
+		_preprocess(option, chartOpts);
 		_addPlotOptions(option, chartOpts);
 		if (chartType !== 'pie') {
 			_addxAxis(option, chartOpts);
